@@ -10,6 +10,7 @@ public class BulletController : MonoBehaviour
     // Private Variables
     Rigidbody2D rb;
 
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -35,12 +36,14 @@ public class BulletController : MonoBehaviour
     {
         if (collision.CompareTag("Ground"))
         {
+
             Destroy(gameObject);
         }
         else if (collision.CompareTag("Enemy"))
         {
             collision.gameObject.GetComponent<EnemyController>().GetDamage(Damage);
             Destroy(gameObject);
+
         }
     }
 }

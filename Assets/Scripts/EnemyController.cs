@@ -16,6 +16,23 @@ public class EnemyController : MonoBehaviour
     Vector2 PreviousPlayerDirection;
     Rigidbody2D rb;
     BoxCollider2D col;
+
+    public GameObject explosion;
+
+    public GameObject fx;
+
+    public Transform lenemi;
+
+    public float timer;
+
+    public float timer01;
+
+    public SpriteRenderer m_SpriteRenderer;
+
+    //public Rigidbody2D rb;
+
+    public bool ou;
+        
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -35,11 +52,32 @@ public class EnemyController : MonoBehaviour
         PreviousPlayerDirection = PlayerDirection;
 
         //Go towards Player
-        rb.velocity = new Vector2(transform.forward.z * DriftFactor * Speed * Time.fixedDeltaTime, rb.velocity.y);
+        if(timer <= 0)
+        {
+            rb.velocity = new Vector2(transform.forward.z * DriftFactor * Speed * Time.fixedDeltaTime, rb.velocity.y);
+        }
+
+        if(timer01 <= 0)
+        {
+            m_SpriteRenderer.color = Color.red;
+
+        }
+
+        if (timer >= 0)
+        {
+            timer = timer - 1 * Time.deltaTime;
+        }
+
+        if (timer01 >= 0)
+        {
+            timer01 = timer01 - 1 * Time.deltaTime;
+        }
 
         //Die
-        if(Health <= 0)
+        if (Health <= 0)
         {
+            Instantiate(fx, lenemi.transform.position, Quaternion.identity);
+
             Destroy(gameObject);
         }
 
@@ -53,6 +91,26 @@ public class EnemyController : MonoBehaviour
     public void GetDamage(float dmg)
     {
         Health -= dmg;
+
+        m_SpriteRenderer.color = Color.white;
+        if (Health == 1)
+        {
+            Instantiate(explosion, lenemi.transform.position, Quaternion.identity);
+        }
+        if(ou == true)
+        {
+            rb.velocity = new Vector3(10, 5, 0);
+            timer = 0.7f;
+            timer01 = 0.085f;
+
+        }
+        if (ou == false)
+        {
+            rb.velocity = new Vector3(-10, 5, 0);
+            timer = 0.7f;
+            timer01 = 0.085f;
+
+        }
     }
 
     void RotateTowardsPlayer()
@@ -60,10 +118,12 @@ public class EnemyController : MonoBehaviour
         if (PlayerDirection.x < 0)
         {
             transform.rotation = new Quaternion(0, 180, 0, 0);
+            ou = true;
         }
         else
         {
             transform.rotation = new Quaternion(0, 0, 0, 0);
+            ou = false;
         }
         DriftFactor = -1;
         StartCoroutine(GetToSpeed(0));

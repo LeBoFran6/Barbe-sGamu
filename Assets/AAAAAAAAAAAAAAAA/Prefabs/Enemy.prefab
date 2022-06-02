@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 8739221477244553001}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 14.316715, y: -1.8300463, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.65, y: 0.65, z: 1.3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -152,5 +152,6 @@ MonoBehaviour:
   fx: {fileID: 1868582808287995343, guid: 88f4caaa74e2fbe4da1418e86892caaa, type: 3}
   lenemi: {fileID: 8739221477244552994}
   timer: 0
+  timer01: 0
   m_SpriteRenderer: {fileID: 8739221477244553005}
   ou: 0

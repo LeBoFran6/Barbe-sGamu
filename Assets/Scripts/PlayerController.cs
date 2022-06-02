@@ -37,6 +37,15 @@ public class PlayerController : MonoBehaviour
     BoxCollider2D col; // Change It If You Use Something Else That Box Collider, Make Sure You Update The Reference In Start Function
 
 
+    public GameObject Dashfx;
+
+    public GameObject ScriptHolder;
+
+    public bool ou;
+
+    public float timer;
+    public float timer01;
+
     ////// START & UPDATE :
 
     void Start()
@@ -62,16 +71,48 @@ public class PlayerController : MonoBehaviour
         }
 
         // Jumping
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown("Jump"))
         {
+            this.transform.localScale = new Vector3(0.5f, 0.27f, 1f);
+
+            //Jump();
+        }
+
+
+        if (Input.GetButtonUp("Jump"))
+        {
+            this.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+
             Jump();
         }
 
+
+
+        /*
+        (Input.GetButtonUp("Fire1")){
+            Jump();
+        }*/
+
         // Dashing
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetButtonDown("Dash"))
         {
             if (MoveDirection != 0 && canDash)
             {
+                this.transform.localScale = new Vector3(0.35f, 0.5f, 1f);
+                if (!AirDash && !InTheGround())
+                    return;
+
+
+                //StartCoroutine(Dash());
+            }
+        }
+
+        if (Input.GetButtonUp("Dash"))
+        {
+            if (MoveDirection != 0 && canDash)
+            {
+                this.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+
                 if (!AirDash && !InTheGround())
                     return;
 
@@ -83,15 +124,30 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         Move();
+
+        if (timer >= 0)
+        {
+            timer = timer - 1 * Time.deltaTime;
+        }
+
+        if (timer01 >= 0)
+        {
+            timer01 = timer01 - 1 * Time.deltaTime;
+        }
     } 
 
     ///// MOVEMENT FUNCTIONS :
 
     void Move()
     {
-        if (canMove)
+
+        if (timer <= 0)
         {
-            rb.velocity = new Vector2(MoveDirection * Speed * Time.fixedDeltaTime, rb.velocity.y);
+            if (canMove)
+            {
+                rb.velocity = new Vector2(MoveDirection * Speed * Time.fixedDeltaTime, rb.velocity.y);
+            }
+
         }
 
     } 
@@ -126,6 +182,8 @@ public class PlayerController : MonoBehaviour
         if (InTheGround())
         {
             rb.velocity = Vector2.up * JumpPower;
+            //SOUND DE JUMP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         }
         else
         {
@@ -140,7 +198,34 @@ public class PlayerController : MonoBehaviour
 
     void Attack()
     {
+        
+
+
+
+
+
+
+
+
         Instantiate(BulletPrefab, transform.position, transform.rotation);
+        //SOUND DE SHOOT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        ScriptHolder.GetComponent<Shake>().start=true;
+
+        if (ou == true)
+        {
+            rb.velocity = new Vector3(-8, 5, 0);
+            timer = 0.2f;
+            timer01 = 0.085f;
+
+        }
+        if (ou == false)
+        {
+            rb.velocity = new Vector3(8, 5, 0);
+            timer = 0.2f;
+            timer01 = 0.085f;
+
+        }
+
     }
 
     void RotateToMoveDirection()
@@ -153,11 +238,13 @@ public class PlayerController : MonoBehaviour
             if (MoveDirection > 0)
             {
                 transform.rotation = new Quaternion(0, 0, 0, 0);
+                ou = true;
                 
             }
             else
             {
                 transform.rotation = new Quaternion(0, 180, 0, 0);
+                ou = false;
             }
         }
     }
@@ -167,6 +254,8 @@ public class PlayerController : MonoBehaviour
     // Multiply The Speed With Certain Amount For A Certain Duration
     IEnumerator Dash()
     {
+        Instantiate(Dashfx, this.transform.position, Quaternion.identity);
+        //SOUND DE DASHE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         canDash = false;
         float originalSpeed = Speed; 
        

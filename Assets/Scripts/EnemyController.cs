@@ -77,6 +77,8 @@ public class EnemyController : MonoBehaviour
         if (Health <= 0)
         {
             Instantiate(fx, lenemi.transform.position, Quaternion.identity);
+            //SOUND DE MORT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
             Destroy(gameObject);
         }
@@ -96,8 +98,11 @@ public class EnemyController : MonoBehaviour
         if (Health == 1)
         {
             Instantiate(explosion, lenemi.transform.position, Quaternion.identity);
+            this.transform.localScale = new Vector3(0.38f, 0.38f, 0.7f);
+            //SOUND DE DOULEURE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         }
-        if(ou == true)
+        if (ou == true)
         {
             rb.velocity = new Vector3(10, 5, 0);
             timer = 0.7f;
